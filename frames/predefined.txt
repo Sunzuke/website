@@ -1,0 +1,9 @@
+The following directories won't work:
+ - theme
+ - source
+ - heart
+ - frames
+ - ajax
+ - popup
+ - flaw
+ - error

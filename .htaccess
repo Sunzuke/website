@@ -1,0 +1,8 @@
+<Files ~ "\.inc$"> 
+	Order allow,deny 
+	Deny from all 
+</Files>
+
+RewriteEngine on
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteRule ^(.+)$ index.php [QSA,L]

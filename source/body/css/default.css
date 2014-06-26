@@ -1,0 +1,84 @@
+html {
+	HEIGHT: 100%;
+}
+body {
+	PADDING: 0px;
+	MARGIN: 0px;
+	HEIGHT: 100%;
+}
+img {
+	BORDER: 0px;
+}
+div {
+	PADDING: 0px;
+	MARGIN: 0px;
+}
+TABLE,TR,TD,TH {
+	BORDER: 0px;
+	border-collapse: collapse;
+	border-spacing: 0px;
+	PADDING:0;
+	cellpadding: 0px;
+	cellspacing: 0px;
+	empty-cells: show;
+}
+body,td,th,textarea,input,div,a,h1,h2,h3,h4,h5,h6 {
+	FONT-FAMILY: arial,sans-serif;
+}
+body,td,th,textarea,input {
+	FONT-SIZE: 12pt;
+	color: #000000;
+	text-decoration: none;
+}
+form {
+	display: block;
+	margin: 0px;
+}
+input:not([type='checkbox']):not([type='submit']), textarea {
+	padding: 3px;
+	padding-left: 5px;
+	padding-right: 20px;
+	border-radius: 3px;
+	border: 1px solid #b5b5b5;
+	FONT-SIZE: 10pt;
+	COLOR: #757575;
+	height: 28px;
+	width: 200px;
+	background-color: #FFFFFF;
+	background-image: url('/source/body/images/edit.png');
+	background-position: right top;
+	background-repeat: no-repeat;
+}
+input:not([type='checkbox']):not([type='submit']):hover {	border: 1px solid #8f8f8f;	COLOR: #505050;	}
+input:not([type='checkbox']):not([type='submit']):focus {	border: 1px solid #ecc57a;	COLOR: #000000;	}
+input[readonly="readonly"], input[readonly] {
+	background-color: #f9f9f9;
+	background-image: url('/source/body/images/edit_denied.png');
+	background-position: right top;
+	background-repeat: no-repeat;
+}
+select {
+	padding: 3px;
+	padding-left: 5px;
+	padding-right: 20px;
+	border-radius: 3px;
+	border: 1px solid #b5b5b5;
+	FONT-SIZE: 10pt;
+	COLOR: #000000;
+	height: 28px;
+	width: 200px;
+	background-color: #FFFFFF;
+	background-position: right top;
+	background-repeat: no-repeat;
+}
+a:link {			FONT-SIZE: 12pt;		color: #000000;	text-decoration: none;			}
+a:visited {			FONT-SIZE: 12pt;		color: #000000;	text-decoration: none;			}
+a:focus {			FONT-SIZE: 12pt;		color: #000000;	text-decoration: none;			}
+a:hover {			FONT-SIZE: 12pt;		color: #000000;	text-decoration: underline;		}
+a:active {			FONT-SIZE: 12pt;		color: #000000;	text-decoration: none;			}
+h1 {	MARGIN: 0px;	FONT-SIZE: 26px;	color: #000000;	text-shadow:#0000FF 1px -1px;	}
+h2 {	MARGIN: 0px;	FONT-SIZE: 24px;	color: #000000;	text-shadow:#0000FF 1px -1px;	}
+h3 {	MARGIN: 0px;	FONT-SIZE: 22px;	color: #000000;	text-shadow:#0000FF 1px -1px;	}
+h4 {	MARGIN: 0px;	FONT-SIZE: 20px;	color: #000000;	text-shadow:#0000FF 1px -1px;	}
+h5 {	MARGIN: 0px;	FONT-SIZE: 18px;	color: #000000;									}
+h6 {	MARGIN: 0px;	FONT-SIZE: 16px;	color: #000000;									}
