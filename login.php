@@ -2,7 +2,7 @@
 if(!defined('Pascal Salesch')) {	exit;	} else {	$filelist[] = __FILE__;	}
 
 	$htime = $timestamp-60*60;//1 user expected in $htime seconds
-	$ttime = $timestamp-10; //tolerance time
+	$ttime = $timestamp-5; //tolerance time
 	//============================================================================
 	//Logout
 	if($s[1] == "logout") {
@@ -20,56 +20,38 @@ if(!defined('Pascal Salesch')) {	exit;	} else {	$filelist[] = __FILE__;	}
 	$query = "
 		SELECT * FROM $db[user].`user`
 		WHERE `lastlogin` < '".date('Y-m-d H:i:s', $ttime)."'
-		AND `lastlogin` > '".date('Y-m-d H:i:s', $htime)."'
+		AND `online` LIKE '1'
+		LIMIT 0,10
 	";
 	$resource = $sqli->query($query);
 	$resource->data_seek(0);
 	while($row = $resource->fetch_assoc()) {
 		$query2 = "
-			SELECT * FROM $db[log].`log`
-			WHERE `ID` LIKE '".$row['ID']."'
-			AND `type` LIKE 'user'
-			AND `event` LIKE 'logout'
-			AND `time` >= '".$row['lastlogin']."'
+			INSERT INTO $db[log].`log` (`ID`, `type`, `time`, `event`, `value`)
+			VALUES ('".$row['ID']."', 'user', '".$row['lastlogin']."', 'logout', '".$row['ip']."');
 		";
 		$resource2 = $sqli->query($query2);
-		if(!$resource2 || $resource2->num_rows == 0) {
-			$logouttime = strtotime($row['lastlogin']);
-			$query3 = "
-				INSERT INTO $db[log].`log` (`ID`, `type`, `time`, `event`, `value`)
-				VALUES ('".$row['ID']."', 'user', '".date('Y-m-d H:i:s', $logouttime)."', 'logout', '".$row['ip']."');
-			";
-			$resource3 = $sqli->query($query3);
-			$logouttime = "";
-		}
+		$query3 = "UPDATE $db[user].`user` SET `online`='0' WHERE `ID` LIKE '".$row['ID']."'";
+		$resource3 = $sqli->query($query3);
 	}
 	//============================================================================
 	//Guest Logout Log
 	$query = "
 		SELECT * FROM $db[guest].`guest`
 		WHERE `lastlogin` < '".date('Y-m-d H:i:s', $ttime)."'
-		AND `lastlogin` > '".date('Y-m-d H:i:s', $htime)."'
+		AND `online` LIKE '1'
+		LIMIT 0,10
 	";
 	$resource = $sqli->query($query);
 	$resource->data_seek(0);
 	while($row = $resource->fetch_assoc()) {
 		$query2 = "
-			SELECT * FROM $db[log].`log`
-			WHERE `ID` LIKE '".$row['ID']."'
-			AND `type` LIKE 'guest'
-			AND `event` LIKE 'logout'
-			AND `time` >= '".$row['lastlogin']."'
+			INSERT INTO $db[log].`log` (`ID`, `type`, `time`, `event`, `value`)
+			VALUES ('".$row['ID']."', 'guest', '".$row['lastlogin']."', 'logout', '".$row['ip']."');
 		";
 		$resource2 = $sqli->query($query2);
-		if(!$resource2 || $resource2->num_rows == 0) {
-			$logouttime = strtotime($row['lastlogin']);
-			$query3 = "
-				INSERT INTO $db[log].`log` (`ID`, `type`, `time`, `event`, `value`)
-				VALUES ('".$row['ID']."', 'guest', '".date('Y-m-d H:i:s', $logouttime)."', 'logout', '".$row['ip']."');
-			";
-			$resource3 = $sqli->query($query3);
-			$logouttime = "";
-		}
+		$query3 = "UPDATE $db[guest].`guest` SET `online`='0' WHERE `ID` LIKE '".$row['ID']."'";
+		$resource3 = $sqli->query($query3);
 	}
 	//============================================================================
 	//User Login
@@ -85,7 +67,10 @@ if(!defined('Pascal Salesch')) {	exit;	} else {	$filelist[] = __FILE__;	}
 			$resource->data_seek(0);
 			$row = $resource->fetch_assoc();
 			foreach($row as $key => $value) $$key = $value;
-			$query = "UPDATE $db[user].`user` SET `lastlogin`='".date('Y-m-d H:i:s')."' WHERE `ID` LIKE '".$ID."'";
+			$query = "
+				UPDATE $db[user].`user`
+				SET	`lastlogin`='".date('Y-m-d H:i:s')."', `online`='1'
+				WHERE `ID` LIKE '".$ID."'";
 			$sqli->query($query);
 		}
 	}
@@ -106,7 +91,12 @@ if(!defined('Pascal Salesch')) {	exit;	} else {	$filelist[] = __FILE__;	}
 		$resource->data_seek(0);
 		$row = $resource->fetch_assoc();
 		foreach($row as $key => $value) $$key = $value;
-		$query = "UPDATE $db[guest].`guest` SET `lastlogin`='".date('Y-m-d H:i:s')."' WHERE `ID` LIKE '".$ID."'";
+		$online = 0;
+		$query = "
+			UPDATE $db[guest].`guest`
+			SET `lastlogin`='".date('Y-m-d H:i:s')."',`online`='1'
+			WHERE `ID` LIKE '".$ID."'
+		";
 		$sqli->query($query);
 	}
 	$UserID = $ID;
