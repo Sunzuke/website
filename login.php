@@ -1,6 +1,39 @@
 <?php
 if(!defined('Pascal Salesch')) {	exit;	} else {	$filelist[] = __FILE__;	}
-
+	//============================================================================
+	$sqli->query("
+		CREATE TABLE IF NOT EXISTS ".$sql_db[0].".`user` (
+		  `ID` int(255) NOT NULL AUTO_INCREMENT,
+		  `login` varchar(255) NOT NULL DEFAULT '',
+		  `password` varchar(255) NOT NULL DEFAULT '',
+		  `online` int(11) NOT NULL DEFAULT '0',
+		  `lastlogin` varchar(255) NOT NULL DEFAULT '',
+		  `lastip` varchar(255) NOT NULL DEFAULT '',
+		  PRIMARY KEY (`ID`),
+		  UNIQUE KEY `ID` (`ID`)
+		) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+	");
+	$sqli->query("
+		CREATE TABLE IF NOT EXISTS ".$sql_db[0].".`guest` (
+		  `ID` int(11) NOT NULL AUTO_INCREMENT,
+		  `session` varchar(255) NOT NULL DEFAULT '',
+		  `ip` varchar(255) NOT NULL DEFAULT '',
+		  `online` int(11) NOT NULL DEFAULT '0',
+		  `lastlogin` varchar(255) NOT NULL DEFAULT '',
+		  PRIMARY KEY (`ID`),
+		  UNIQUE KEY `ID` (`ID`)
+		) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+	");
+	$sqli->query("
+		CREATE TABLE IF NOT EXISTS ".$sql_db[0].".`log` (
+		  `ID` int(11) NOT NULL,
+		  `type` varchar(255) NOT NULL,
+		  `time` varchar(255) NOT NULL,
+		  `event` varchar(255) NOT NULL,
+		  `value` varchar(255) NOT NULL
+		) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+	");
+	//============================================================================
 	$htime = $timestamp-60*60;//1 user expected in $htime seconds
 	$ttime = $timestamp-5; //tolerance time
 	//============================================================================
@@ -159,5 +192,26 @@ if(!defined('Pascal Salesch')) {	exit;	} else {	$filelist[] = __FILE__;	}
 		}
 	}
 	//============================================================================
-
+	//Status Check
+	function getStatus($ID) {
+		global $sqli;
+		global $db;
+		global $ttime;
+		$query = "
+			SELECT * FROM $db[user].`user`
+			WHERE `ID` LIKE '".$ID."'
+		";
+		$resource = $sqli->query($query);
+		if($resource && $resource->num_rows > 0) {
+			$row=mysqli_fetch_assoc($result);
+			if($row['lastlogin'] > $ttime) {
+				return 1;
+			} else {
+				return 0;
+			}
+		} else {
+			return 0;
+		}
+	}
+	//============================================================================
 ?>
